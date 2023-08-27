@@ -1,35 +1,17 @@
 import { db } from "../database/database.config.js"
+import bcrypt from "bcrypt"
 
 export async function signUp (request, response) {
-    const { name, email, password } = req.body
+    const { name, email, password } = request.body
 
     try {
-        const isUserRegistered = await db.collection("users").findOne( { email } )
-        if (user) return response.status(409).send("Já há um cadastro com este email!")
+        const isEmailRegistered = await db.collection("users").findOne( { email } )
+        if (isEmailRegistered) return response.status(409).send( { message: "Já há um cadastro com este email!" } )
 
-    } catch (error) { response.status(500).send(error.message) }
-}
+        const hash = bcrypt.hashSync(password, 12)
+        await db.collection("users").insertOne( { name, email, password: hash } )
 
-export async function signIn (request, response) {
-    // receber dados do body (email e senha)
-    const { email, passaword } = request.body
-
-    // validações independentes do db:
-    // ambos foram recebidos ? USE OPTIONAL CHAINING const token = auth?.replace("Bearer ", "") if (!token) return 401 "m"
-    
-    // ambos estão de acordo com o schema ? (criar middleware e schema)
-    
-
-    try {
-        // validações:
-
-        // acesso pela rota "/" com post (route signIn)
-        // email está cadastrado ?
-        // senha está correta ?
-
-        // sucesso:
-        // retornar token
-        // 200
+        response.sendStatus(201)
 
     } catch (error) { response.status(500).send(error.message) }
 }
