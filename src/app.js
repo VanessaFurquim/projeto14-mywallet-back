@@ -1,7 +1,6 @@
 import express, { json } from "express"
 import cors from "cors"
 import { db } from "../src/database/database.config.js"
-import { signUp } from "./controllers/auth.controllers.js"
 import authRouter from "./routes/auth.routes.js"
 
 const app = express()
