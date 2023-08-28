@@ -3,9 +3,10 @@ import { db } from "../database/database.config.js"
 export async function addTransactions (request, response) {
     const { tipo } = request.params
     const { amount, description } = request.body
+
     const userId = response.locals.session.userId
 
-    
+    console.log(response)
 
     try {
         const transaction = { amount, description, date: dayjs().valueOf(), tipo, token, userId }
