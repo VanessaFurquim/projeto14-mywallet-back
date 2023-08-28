@@ -1,20 +1,25 @@
 import { db } from "../database/database.config.js"
+import dayjs from "dayjs"
 
 export async function addTransactions (request, response) {
     const { tipo } = request.params
     const { amount, description } = request.body
 
+
     const userId = response.locals.session.userId
 
-    console.log(response)
+    console.log(response.locals.session)
 
     try {
-        const transaction = { amount, description, date: dayjs().valueOf(), tipo, token, userId }
+        const transaction = { amount, description, date: dayjs().valueOf(), tipo, userId }
         await db.collection("transactions").insertOne( transaction )
 
         response.sendStatus(201)
 
-    } catch (error) { response.status(500).send(error.message) }
+    } catch (error) {
+        console.log(error)
+        response.status(500).send(error.message)
+    }
 }
 
 // export async function listTransactions (request, response) {
