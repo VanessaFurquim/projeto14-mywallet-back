@@ -30,13 +30,10 @@ export async function signIn (request, response) {
 
         const isPasswordCorrect = bcrypt.compareSync(password, user.password)
         if (!isPasswordCorrect) return response.status(401).send( { message: "Senha inválida" } )
-        // enviar alert no front
 
         const token = uuid()
         await db.collection("sessions").insertOne( { token, userId: user._id } )
-        response.send(token)
-
-        response.sendStatus(200)
+        response.status(200).send(token)
 
     } catch (error) { response.status(500).send(error.message) }
 }
