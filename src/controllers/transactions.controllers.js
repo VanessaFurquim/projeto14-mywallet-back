@@ -7,11 +7,12 @@ export async function addTransactions (request, response) {
 
 
     const userId = response.locals.session.userId
+    const token = response.locals.session.token
 
     console.log(response.locals.session)
 
     try {
-        const transaction = { amount, description, date: dayjs().valueOf(), tipo, userId }
+        const transaction = { amount, description, date: dayjs().valueOf(), tipo, token, userId }
         await db.collection("transactions").insertOne( transaction )
 
         response.sendStatus(201)
